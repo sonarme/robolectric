@@ -13,7 +13,6 @@ import android.view.TouchDelegate;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import org.robolectric.Robolectric;
@@ -268,10 +267,10 @@ public class ShadowView {
         layoutParams = params;
     }
 
-    @Implementation
-    public final ViewParent getParent() {
-        return parent == null ? null : (ViewParent) parent.realView;
-    }
+//    @Implementation
+//    public final ViewParent getParent() {
+//        return parent == null ? null : (ViewParent) parent.realView;
+//    }
 
     @Implementation
     public final Context getContext() {
@@ -558,6 +557,7 @@ public class ShadowView {
     @Implementation
     public void requestLayout() {
         didRequestLayout = true;
+        directlyOn(realView, View.class).requestLayout();
     }
 
     public boolean didRequestLayout() {
@@ -624,6 +624,7 @@ public class ShadowView {
     @Implementation
     public void invalidate() {
         wasInvalidated = true;
+        directlyOn(realView, View.class).invalidate();
     }
 
     @Implementation

@@ -117,7 +117,11 @@ public class RoboAttributeSet implements AttributeSet {
     @Override
     public int getAttributeNameResource(int index) {
         ResName resName = attributes.get(index).resName;
-        return resourceLoader.getResourceIndex().getResourceId(resName);
+        Integer resourceId = resourceLoader.getResourceIndex().getResourceId(resName);
+        if (resourceId == null) {
+            System.out.println("warn: no id for " + resName);
+        }
+        return resourceId == null ? 0 : resourceId;
     }
 
     @Override

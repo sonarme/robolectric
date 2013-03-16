@@ -177,6 +177,7 @@ import org.robolectric.bytecode.RobolectricInternals;
 import org.robolectric.bytecode.ShadowWrangler;
 import org.robolectric.res.ResourceLoader;
 import org.robolectric.shadows.HttpResponseGenerator;
+import android.os.RoboVibrator;
 import org.robolectric.shadows.ShadowAbsListView;
 import org.robolectric.shadows.ShadowAbsSeekBar;
 import org.robolectric.shadows.ShadowAccountManager;

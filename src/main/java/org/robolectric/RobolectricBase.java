@@ -17,6 +17,7 @@ import org.robolectric.shadows.ShadowAddress;
 import org.robolectric.shadows.ShadowAlarmManager;
 import org.robolectric.shadows.ShadowAlertDialog;
 import org.robolectric.shadows.ShadowAlphaAnimation;
+import org.robolectric.shadows.ShadowAndroidBidi;
 import org.robolectric.shadows.ShadowAndroidHttpClient;
 import org.robolectric.shadows.ShadowAnimation;
 import org.robolectric.shadows.ShadowAnimationDrawable;
@@ -85,8 +86,10 @@ import org.robolectric.shadows.ShadowDialogPreference;
 import org.robolectric.shadows.ShadowDisplay;
 import org.robolectric.shadows.ShadowDownloadManager;
 import org.robolectric.shadows.ShadowDrawable;
+import org.robolectric.shadows.ShadowEdgeEffect;
 import org.robolectric.shadows.ShadowEditText;
 import org.robolectric.shadows.ShadowEditTextPreference;
+import org.robolectric.shadows.ShadowEmojiFactory;
 import org.robolectric.shadows.ShadowEnvironment;
 import org.robolectric.shadows.ShadowExpandableListView;
 import org.robolectric.shadows.ShadowFilter;
@@ -108,6 +111,7 @@ import org.robolectric.shadows.ShadowInputMethodManager;
 import org.robolectric.shadows.ShadowIntent;
 import org.robolectric.shadows.ShadowIntentFilter;
 import org.robolectric.shadows.ShadowIntentFilterAuthorityEntry;
+import org.robolectric.shadows.ShadowIntentSender;
 import org.robolectric.shadows.ShadowItemizedOverlay;
 import org.robolectric.shadows.ShadowJsPromptResult;
 import org.robolectric.shadows.ShadowJsResult;
@@ -139,6 +143,7 @@ import org.robolectric.shadows.ShadowMatrixCursor;
 import org.robolectric.shadows.ShadowMeasureSpec;
 import org.robolectric.shadows.ShadowMediaPlayer;
 import org.robolectric.shadows.ShadowMediaRecorder;
+import org.robolectric.shadows.ShadowMediaScannerConnection;
 import org.robolectric.shadows.ShadowMediaStore;
 import org.robolectric.shadows.ShadowMenuInflater;
 import org.robolectric.shadows.ShadowMergeCursor;
@@ -203,8 +208,10 @@ import org.robolectric.shadows.ShadowScanResult;
 import org.robolectric.shadows.ShadowScrollView;
 import org.robolectric.shadows.ShadowScroller;
 import org.robolectric.shadows.ShadowSeekBar;
+import org.robolectric.shadows.ShadowSensorEvent;
 import org.robolectric.shadows.ShadowSensorManager;
 import org.robolectric.shadows.ShadowService;
+import org.robolectric.shadows.ShadowServiceManager;
 import org.robolectric.shadows.ShadowSettings;
 import org.robolectric.shadows.ShadowShapeDrawable;
 import org.robolectric.shadows.ShadowSimpleCursorAdapter;
@@ -220,12 +227,14 @@ import org.robolectric.shadows.ShadowSpinner;
 import org.robolectric.shadows.ShadowSslErrorHandler;
 import org.robolectric.shadows.ShadowStatFs;
 import org.robolectric.shadows.ShadowStateListDrawable;
+import org.robolectric.shadows.ShadowSurface;
 import org.robolectric.shadows.ShadowSurfaceView;
 import org.robolectric.shadows.ShadowSyncResult;
 import org.robolectric.shadows.ShadowSystemProperties;
 import org.robolectric.shadows.ShadowTabActivity;
 import org.robolectric.shadows.ShadowTabHost;
 import org.robolectric.shadows.ShadowTabSpec;
+import org.robolectric.shadows.ShadowTabWidget;
 import org.robolectric.shadows.ShadowTelephonyManager;
 import org.robolectric.shadows.ShadowTextPaint;
 import org.robolectric.shadows.ShadowTextUtils;
@@ -283,6 +292,7 @@ public class RobolectricBase {
             ShadowAlertDialog.class,
             ShadowAlertDialog.ShadowBuilder.class,
             ShadowAlphaAnimation.class,
+            ShadowAndroidBidi.class,
             ShadowAndroidHttpClient.class,
             ShadowAnimation.class,
             ShadowAnimationDrawable.class,
@@ -353,8 +363,10 @@ public class RobolectricBase {
             ShadowDownloadManager.class,
             ShadowDownloadManager.ShadowRequest.class,
             ShadowDownloadManager.ShadowQuery.class,
+            ShadowEdgeEffect.class,
             ShadowEditText.class,
             ShadowEditTextPreference.class,
+            ShadowEmojiFactory.class,
             ShadowEnvironment.class,
             ShadowExpandableListView.class,
             ShadowFilter.class,
@@ -376,6 +388,7 @@ public class RobolectricBase {
             ShadowIntent.class,
             ShadowIntentFilter.class,
             ShadowIntentFilterAuthorityEntry.class,
+            ShadowIntentSender.class,
             ShadowItemizedOverlay.class,
             ShadowLayoutAnimationController.class,
             ShadowJsPromptResult.class,
@@ -407,6 +420,7 @@ public class RobolectricBase {
             ShadowMeasureSpec.class,
             ShadowMediaPlayer.class,
             ShadowMediaRecorder.class,
+            ShadowMediaScannerConnection.class,
             ShadowMediaStore.ShadowImages.ShadowMedia.class,
             ShadowMenuInflater.class,
             ShadowMergeCursor.class,
@@ -466,8 +480,10 @@ public class RobolectricBase {
             ShadowScrollView.class,
             ShadowScroller.class,
             ShadowSeekBar.class,
+            ShadowSensorEvent.class,
             ShadowSensorManager.class,
             ShadowService.class,
+            ShadowServiceManager.class,
             ShadowSettings.class,
             ShadowSettings.ShadowSecure.class,
             ShadowSettings.ShadowSystem.class,
@@ -494,11 +510,13 @@ public class RobolectricBase {
             ShadowSslErrorHandler.class,
             ShadowStateListDrawable.class,
             ShadowStatFs.class,
+            ShadowSurface.class,
             ShadowSurfaceView.class,
             ShadowSystemProperties.class,
             ShadowTabActivity.class,
             ShadowTabHost.class,
             ShadowTabSpec.class,
+            ShadowTabWidget.class,
             ShadowTelephonyManager.class,
             ShadowTextPaint.class,
             ShadowTextUtils.class,

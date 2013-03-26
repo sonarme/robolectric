@@ -275,10 +275,10 @@ public class RobolectricTestRunner extends BlockJUnit4ClassRunner {
                 configureShadows(sdkEnvironment, config);
                 setupLogging();
 
+                ParallelUniverseInterface parallelUniverseInterface = getHooksInterface(sdkEnvironment);
                 try {
                     assureTestLifecycle(sdkEnvironment);
 
-                    ParallelUniverseInterface parallelUniverseInterface = getHooksInterface(sdkEnvironment);
                     parallelUniverseInterface.resetStaticState();
                     parallelUniverseInterface.setDatabaseMap(databaseMap); //Set static DatabaseMap in DBConfig
 
@@ -294,7 +294,7 @@ public class RobolectricTestRunner extends BlockJUnit4ClassRunner {
                     ResourcePath systemResourcePath = sdkEnvironment.getSystemResourcePath();
                     ResourceLoader systemResourceLoader = getSystemResourceLoader(systemResourcePath);
                     if (appManifest != null) {
-                        setupApplicationState(bootstrappedMethod, parallelUniverseInterface, strictI18n, systemResourceLoader, sdkEnvironment);
+                        setUpApplicationState(bootstrappedMethod, parallelUniverseInterface, strictI18n, systemResourceLoader, sdkEnvironment);
                     }
                     testLifecycle.beforeTest(bootstrappedMethod);
                 } catch (Exception e) {
@@ -318,7 +318,11 @@ public class RobolectricTestRunner extends BlockJUnit4ClassRunner {
                         }
                     }
                 } finally {
-                    internalAfterTest(bootstrappedMethod);
+                    try {
+                        parallelUniverseInterface.tearDownApplication();
+                    } finally {
+                        internalAfterTest(bootstrappedMethod);
+                    }
                 }
             }
         };
@@ -410,8 +414,8 @@ public class RobolectricTestRunner extends BlockJUnit4ClassRunner {
         return classHandler;
     }
 
-    protected void setupApplicationState(Method method, ParallelUniverseInterface parallelUniverseInterface, boolean strictI18n, ResourceLoader systemResourceLoader, SdkEnvironment sdkEnvironment) {
-        parallelUniverseInterface.setupApplicationState(method, testLifecycle, sdkEnvironment, strictI18n, systemResourceLoader);
+    protected void setUpApplicationState(Method method, ParallelUniverseInterface parallelUniverseInterface, boolean strictI18n, ResourceLoader systemResourceLoader, SdkEnvironment sdkEnvironment) {
+        parallelUniverseInterface.setUpApplicationState(method, testLifecycle, sdkEnvironment, strictI18n, systemResourceLoader);
     }
 
     private int getTargetSdkVersion(SdkEnvironment sdkEnvironment) {

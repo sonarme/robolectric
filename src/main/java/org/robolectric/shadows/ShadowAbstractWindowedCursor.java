@@ -66,7 +66,11 @@ public class ShadowAbstractWindowedCursor extends ShadowAbstractCursor {
                 throw new RuntimeException(x);
             }
         } else {
-            return (String)value;
+            try {
+                return (String)value;
+            } catch (ClassCastException e) {
+                return String.valueOf(value);
+            }
         }
     }
 

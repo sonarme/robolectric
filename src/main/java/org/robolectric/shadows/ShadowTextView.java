@@ -1,6 +1,7 @@
 package org.robolectric.shadows;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.text.InputFilter;
@@ -13,6 +14,7 @@ import android.text.method.MovementMethod;
 import android.text.method.TransformationMethod;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
+import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -62,6 +64,18 @@ public class ShadowTextView extends ShadowView {
     private List<Integer> previousKeyCodes = new ArrayList<Integer>();
     private List<KeyEvent> previousKeyEvents = new ArrayList<KeyEvent>();
     private Layout layout;
+
+    @Override public void __constructor__(Context context) {
+        super.__constructor__(context);
+    }
+
+    @Override public void __constructor__(Context context, AttributeSet attributeSet) {
+        super.__constructor__(context, attributeSet);
+    }
+
+    @Override public void __constructor__(Context context, AttributeSet attributeSet, int defStyle) {
+        super.__constructor__(context, attributeSet, defStyle);
+    }
 
     @Override
     public void applyAttributes() {
@@ -443,7 +457,7 @@ public class ShadowTextView extends ShadowView {
     private void applyTextAttribute() {
         String text = attributeSet.getAttributeValue("android", "text");
         if (text != null) {
-            if (text.startsWith("@string/")) {
+            if (text.startsWith("@")) {
                 int textResId = attributeSet.getAttributeResourceValue("android", "text", 0);
                 text = context.getResources().getString(textResId);
             }
@@ -454,12 +468,11 @@ public class ShadowTextView extends ShadowView {
     private void applyTextColorAttribute() {
         String colorValue = attributeSet.getAttributeValue("android", "textColor");
         if (colorValue != null) {
-            if (colorValue.startsWith("@color/") || colorValue.startsWith("@android:color/")) {
+            if (colorValue.startsWith("@")) {
                 int colorResId = attributeSet.getAttributeResourceValue("android", "textColor", 0);
                 setTextColor(context.getResources().getColor(colorResId));
-            } else if (colorValue.startsWith("#")) {
-                int colorFromHex = (int) Long.valueOf(colorValue.replaceAll("#", ""), 16).longValue();
-                setTextColor(colorFromHex);
+            } else {
+                setTextColor(Color.parseColor(colorValue));
             }
         }
     }
@@ -467,10 +480,9 @@ public class ShadowTextView extends ShadowView {
     private void applyHintAttribute() {
         String hint = attributeSet.getAttributeValue("android", "hint");
         if (hint != null) {
-            if (hint.startsWith("@string/")) {
+            if (hint.startsWith("@")) {
                 int textResId = attributeSet.getAttributeResourceValue("android", "hint", 0);
                 hint = context.getResources().getString(textResId);
-
             }
             setHint(hint);
         }
@@ -479,12 +491,11 @@ public class ShadowTextView extends ShadowView {
     private void applyHintColorAttribute() {
         String colorValue = attributeSet.getAttributeValue("android", "hintColor");
         if (colorValue != null) {
-            if (colorValue.startsWith("@color/") || colorValue.startsWith("@android:color/")) {
+            if (colorValue.startsWith("@")) {
                 int colorResId = attributeSet.getAttributeResourceValue("android", "hintColor", 0);
                 setHintTextColor(context.getResources().getColor(colorResId));
-            } else if (colorValue.startsWith("#")) {
-                int colorFromHex = (int) Long.valueOf(colorValue.replaceAll("#", ""), 16).longValue();
-                setHintTextColor(colorFromHex);
+            } else {
+                setHintTextColor(Color.parseColor(colorValue));
             }
         }
     }

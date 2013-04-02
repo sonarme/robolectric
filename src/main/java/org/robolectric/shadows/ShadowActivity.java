@@ -155,6 +155,12 @@ public class ShadowActivity extends ShadowContextThemeWrapper {
         return getApplication();
     }
 
+    @Override
+    @Implementation
+    public Object getSystemService(String name) {
+        return super.getSystemService(name);
+    }
+
     @Implementation
     public void setIntent(Intent intent) {
         this.intent = intent;

@@ -5,6 +5,7 @@ import android.text.style.TypefaceSpan;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.TestRunners;
+import org.robolectric.annotation.Config;
 
 import static junit.framework.Assert.assertNull;
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -63,6 +64,7 @@ public class SpannableStringBuilderTest {
     }
 
     @Test
+    @Config(shadows = {ShadowSpannableString.class, ShadowSpannableStringBuilder.class, ShadowSpannableStringInternal.class, ShadowSpannableString.class})
     public void setSpan_canAssignSpanToSubsequence() throws Exception {
         SpannableStringBuilder builder = new SpannableStringBuilder("abcd");
         ShadowSpannableStringBuilder shadowBuilder = shadowOf(builder);
@@ -77,6 +79,7 @@ public class SpannableStringBuilderTest {
     }
 
     @Test
+    @Config(shadows = {ShadowSpannableString.class, ShadowSpannableStringBuilder.class, ShadowSpannableStringInternal.class, ShadowSpannableString.class})
     public void setSpan_canHandleGaps() throws Exception {
         SpannableStringBuilder builder = new SpannableStringBuilder("abcd");
         TypefaceSpan typeface1 = new TypefaceSpan("foo");
@@ -85,6 +88,7 @@ public class SpannableStringBuilderTest {
     }
 
     @Test
+    @Config(shadows = {ShadowSpannableString.class, ShadowSpannableStringBuilder.class, ShadowSpannableStringInternal.class, ShadowSpannableString.class})
     public void getSpanAt_returnsNullIfNoSpanAssigned() throws Exception {
         SpannableStringBuilder builder = new SpannableStringBuilder("abcd");
         assertNull(shadowOf(builder).getSpanAt(4));

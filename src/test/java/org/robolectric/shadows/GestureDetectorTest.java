@@ -19,7 +19,7 @@ public class GestureDetectorTest {
 
     @Before
     public void setUp() throws Exception {
-        detector = new GestureDetector(null);
+        detector = new GestureDetector(new TestOnGestureListener());
         motionEvent = MotionEvent.obtain(-1, -1, MotionEvent.ACTION_UP, 100, 30, -1);
     }
 

@@ -3,6 +3,7 @@ package org.robolectric.shadows;
 import android.database.DataSetObserver;
 import android.os.Handler;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import org.robolectric.internal.Implementation;
@@ -300,6 +301,36 @@ public class ShadowAdapterView extends ShadowViewGroup {
 
         super.removeAllViews();
         addViews();
+    }
+
+    @Implementation
+    @Override
+    public void addView(View child) {
+        super.addView(child);
+    }
+
+    @Implementation
+    @Override
+    public void addView(View child, int index) {
+        super.addView(child, index);
+    }
+
+    @Implementation
+    @Override
+    public void addView(View child, int index, ViewGroup.LayoutParams params) {
+        super.addView(child, index, params);
+    }
+
+    @Implementation
+    @Override
+    public void addView(View child, ViewGroup.LayoutParams params) {
+        super.addView(child, params);
+    }
+
+    @Implementation
+    @Override
+    public void addView(View child, int width, int height) {
+        super.addView(child, width, height);
     }
 
     protected void addViews() {

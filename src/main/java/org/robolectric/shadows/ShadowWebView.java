@@ -7,10 +7,16 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import org.fest.reflect.field.Invoker;
 import org.robolectric.internal.Implementation;
 import org.robolectric.internal.Implements;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.HashMap;
+
+import static org.fest.reflect.core.Reflection.field;
 
 @SuppressWarnings({"UnusedDeclaration"})
 @Implements(WebView.class)
@@ -32,7 +38,7 @@ public class ShadowWebView extends ShadowAbsoluteLayout {
     private WebChromeClient webChromeClient;
     private boolean canGoBack;
     private int goBackInvocations = 0;
-    private ShadowWebView.LoadData lastLoadData;
+    private LoadData lastLoadData;
     private LoadDataWithBaseURL lastLoadDataWithBaseURL;
     private WebView.PictureListener pictureListener;
 
@@ -41,7 +47,62 @@ public class ShadowWebView extends ShadowAbsoluteLayout {
         super.__constructor__(context, attributeSet);
     }
 
+//    public void __constructor__(Context context, AttributeSet attrs, int defStyle,
+//                      Map<String, Object> javaScriptInterfaces, boolean privateBrowsing) {
+//    }
+
     @Implementation
+    public void ensureProviderCreated() {
+        final ClassLoader classLoader = getClass().getClassLoader();
+        Class<?> webViewProviderClass = getClassNamed("android.webkit.WebViewProvider");
+        Invoker<Object> mProviderField = field("mProvider").ofType((Class<Object>) webViewProviderClass).in(realView);
+        if (mProviderField.get() == null) {
+            Object provider = Proxy.newProxyInstance(classLoader, new Class[]{webViewProviderClass}, new InvocationHandler() {
+                @Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                    System.out.println("[DEBUG] WebView: " + method);
+
+                    if (method.getName().equals("getViewDelegate") || method.getName().equals("getScrollDelegate")) {
+                        return Proxy.newProxyInstance(classLoader, new Class[]{
+                                getClassNamed("android.webkit.WebViewProvider$ViewDelegate"),
+                                getClassNamed("android.webkit.WebViewProvider$ScrollDelegate")
+                        }, new InvocationHandler() {
+                            @Override
+                            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                                System.out.println("[DEBUG] WebView delegate: " + method);
+                                return nullish(method);
+                            }
+                        });
+                    }
+
+                    return nullish(method);
+                }
+            });
+            mProviderField.set(provider);
+        }
+    }
+
+    private Object nullish(Method method) {
+        Class<?> returnType = method.getReturnType();
+        if (returnType.equals(long.class)
+                || returnType.equals(double.class)
+                || returnType.equals(int.class)
+                || returnType.equals(float.class)
+                || returnType.equals(short.class)
+                || returnType.equals(byte.class)
+                ) return 0;
+        if (returnType.equals(char.class)) return '\0';
+        if (returnType.equals(boolean.class)) return false;
+        return null;
+    }
+
+    private Class<?> getClassNamed(String className) {
+        try {
+            return getClass().getClassLoader().loadClass(className);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void loadUrl(String url) {
         lastUrl = url;
     }

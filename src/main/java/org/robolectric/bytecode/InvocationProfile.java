@@ -1,7 +1,5 @@
 package org.robolectric.bytecode;
 
-import org.objectweb.asm.Type;
-
 import java.util.Arrays;
 
 class InvocationProfile {
@@ -11,23 +9,16 @@ class InvocationProfile {
     final String[] paramTypes;
     private final boolean isSpecial;
 
-    public InvocationProfile(String methodSignature, boolean isStatic, ClassLoader classLoader) {
-        int parenStart = methodSignature.indexOf('(');
-        int methodStart = methodSignature.lastIndexOf('/', parenStart);
-        String className = methodSignature.substring(0, methodStart).replace('/', '.');
-        this.clazz = loadClass(classLoader, className);
-        this.methodName = methodSignature.substring(methodStart + 1, parenStart);
-
-        Type[] argumentTypes = Type.getArgumentTypes(methodSignature.substring(parenStart));
-        this.paramTypes = new String[argumentTypes.length];
-        for (int i = 0; i < argumentTypes.length; i++) {
-            paramTypes[i] = argumentTypes[i].getClassName();
-        }
+    public InvocationProfile(String methodSignatureString, boolean isStatic, ClassLoader classLoader) {
+        MethodSignature methodSignature = MethodSignature.parse(methodSignatureString);
+        this.clazz = loadClass(classLoader, methodSignature.className);
+        this.methodName = methodSignature.methodName;
+        this.paramTypes = methodSignature.paramTypes;
         this.isStatic = isStatic;
 
-        this.isSpecial = methodSignature.endsWith("/equals(Ljava/lang/Object;)Z")
-                || methodSignature.endsWith("/hashCode()I")
-                || methodSignature.endsWith("/toString()Ljava/lang/String;");
+        this.isSpecial = methodSignatureString.endsWith("/equals(Ljava/lang/Object;)Z")
+                || methodSignatureString.endsWith("/hashCode()I")
+                || methodSignatureString.endsWith("/toString()Ljava/lang/String;");
     }
 
     public Class<?>[] getParamClasses(ClassLoader classLoader) throws ClassNotFoundException {

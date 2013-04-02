@@ -72,6 +72,12 @@ public class ShadowMatrixCursor extends ShadowAbstractCursor {
         return get(column) == null;
     }
 
+    @Implementation
+    @Override
+    public int getCount() {
+        return super.getCount();
+    }
+
     private Object get(int column) {
         if (column < 0 || column >= columnNameArray.length) {
             throw new CursorIndexOutOfBoundsException(null);

@@ -120,4 +120,10 @@ public class ShadowAbstractWindowedCursor extends ShadowAbstractCursor {
         Object o = this.currentRow.get(getColumnNames()[columnIndex]);
         return o == null;
     }
+
+    @Implementation
+    @Override
+    public int getCount() {
+        return super.getCount();
+    }
 }

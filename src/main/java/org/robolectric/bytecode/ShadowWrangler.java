@@ -3,7 +3,6 @@ package org.robolectric.bytecode;
 import org.robolectric.internal.Implements;
 import org.robolectric.internal.RealObject;
 import org.robolectric.util.Function;
-import org.robolectric.util.Join;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -139,7 +138,8 @@ public class ShadowWrangler implements ClassHandler {
     }
 
     private boolean strict(InvocationProfile invocationProfile) {
-        return invocationProfile.clazz.getName().startsWith("android.support") || invocationProfile.isSpecial();
+        return true;
+//        return invocationProfile.clazz.getName().startsWith("android.support") || invocationProfile.isSpecial();
     }
 
     private Class<?> getShadowedClass(Method shadowMethod) {
@@ -166,16 +166,17 @@ public class ShadowWrangler implements ClassHandler {
 
     @Override
     public Object intercept(String signature, Object instance, Object[] paramTypes, Class theClass) throws Throwable {
-        final InvocationProfile invocationProfile = new InvocationProfile(signature, instance == null, theClass.getClassLoader());
+        MethodSignature methodSignature = MethodSignature.parse(signature);
 
-        if (debug)
-            System.out.println("DEBUG: intercepted call to " + signature + "." + invocationProfile.methodName + "(" + Join.join(", ", invocationProfile.paramTypes) + ")");
+        if (debug) {
+            System.out.println("DEBUG: intercepted call to " + methodSignature);
+        }
 
-        return getInterceptionHandler(invocationProfile).call(instance);
+        return getInterceptionHandler(methodSignature).call(instance);
     }
 
-    public Function<Object, Object> getInterceptionHandler(InvocationProfile invocationProfile) {
-        if (invocationProfile.clazz.equals(LinkedHashMap.class) && invocationProfile.methodName.equals("eldest")) {
+    public Function<Object, Object> getInterceptionHandler(MethodSignature methodSignature) {
+        if (methodSignature.className.equals(LinkedHashMap.class.getName()) && methodSignature.methodName.equals("eldest")) {
             return new Function<Object, Object>() {
                 @Override
                 public Object call(Object value) {
@@ -386,7 +387,7 @@ public class ShadowWrangler implements ClassHandler {
                 return shadowMethod.invoke(shadow, params);
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("attempted to invoke " + shadowMethod
-                        + (shadow == null ? "" : " on instance of " + shadow.getClass()));
+                        + (shadow == null ? "" : " on instance of " + shadow.getClass() + ", but " + shadow.getClass().getSimpleName() + " doesn't extend " + shadowMethod.getDeclaringClass().getSimpleName()));
             } catch (InvocationTargetException e) {
                 throw e.getCause();
             }

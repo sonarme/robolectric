@@ -35,7 +35,7 @@ import java.util.Map;
 import static org.robolectric.Robolectric.shadowOf;
 
 @Implements(Activity.class)
-public class ShadowActivity extends ShadowContextWrapper {
+public class ShadowActivity extends ShadowContextThemeWrapper {
     @RealObject
     protected Activity realActivity;
 
@@ -319,6 +319,10 @@ public class ShadowActivity extends ShadowContextWrapper {
     @Implementation
     public void runOnUiThread(Runnable action) {
         Robolectric.getUiThreadScheduler().post(action);
+    }
+
+    @Implementation
+    public void onCreate(Bundle savedInstanceState) {
     }
 
     /**

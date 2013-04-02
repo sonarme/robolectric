@@ -1,6 +1,8 @@
 package org.robolectric.shadows;
 
 import android.database.sqlite.SQLiteCursor;
+import android.database.sqlite.SQLiteCursorDriver;
+import android.database.sqlite.SQLiteQuery;
 import org.robolectric.internal.Implementation;
 import org.robolectric.internal.Implements;
 
@@ -20,6 +22,8 @@ public class ShadowSQLiteCursor extends ShadowAbstractWindowedCursor {
 
     private ResultSet resultSet;
 
+    public void __constructor__(SQLiteCursorDriver driver, String editTable, SQLiteQuery query) {
+    }
 
     /**
      * Stores the column names so they are retrievable after the resultSet has closed
@@ -67,6 +71,12 @@ public class ShadowSQLiteCursor extends ShadowAbstractWindowedCursor {
     @Override
     public final boolean moveToLast() {
         return super.moveToLast();
+    }
+
+    @Implementation
+    @Override
+    public int getCount() {
+        return super.getCount();
     }
 
     @Implementation

@@ -23,7 +23,7 @@ import static org.robolectric.Robolectric.getShadowApplication;
 import static org.robolectric.Robolectric.shadowOf;
 
 @SuppressWarnings({"UnusedDeclaration"})
-@Implements(AlertDialog.class)
+@Implements(value = AlertDialog.class, callThroughByDefault = false)
 public class ShadowAlertDialog extends ShadowDialog {
     @RealObject
     private AlertDialog realAlertDialog;
@@ -53,6 +53,19 @@ public class ShadowAlertDialog extends ShadowDialog {
     public static AlertDialog getLatestAlertDialog() {
         ShadowAlertDialog dialog = Robolectric.getShadowApplication().getLatestAlertDialog();
         return dialog == null ? null : dialog.realAlertDialog;
+    }
+
+    public void __constructor__(Context context, int theme, boolean createContextWrapper) {
+        this.context = context;
+    }
+
+    public void __constructor__(Context context, boolean cancelable, DialogInterface.OnCancelListener cancelListener) {
+        this.context = context;
+    }
+
+    @Implementation
+    public static int resolveDialogTheme(Context context, int resid) {
+        return 0;
     }
 
     @Override
@@ -282,6 +295,10 @@ public class ShadowAlertDialog extends ShadowDialog {
          * @param context the context
          */
         public void __constructor__(Context context) {
+            this.context = context;
+        }
+
+        public void __constructor__(Context context, int themeId) {
             this.context = context;
         }
 

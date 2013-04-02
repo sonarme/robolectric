@@ -22,7 +22,7 @@ import java.util.List;
 import static org.robolectric.Robolectric.shadowOf;
 
 @SuppressWarnings({"UnusedDeclaration"})
-@Implements(Dialog.class)
+@Implements(value = Dialog.class, callThroughByDefault = false)
 public class ShadowDialog {
 
     @RealObject private Dialog realDialog;
@@ -58,11 +58,7 @@ public class ShadowDialog {
         if (shadowApplication != null) shadowApplication.setLatestDialog(latestDialog);
     }
 
-    public void __constructor__(Context context) {
-        __constructor__(context, -1);
-    }
-
-    public void __constructor__(Context context, int themeId) {
+    public void __constructor__(Context context, int themeId, boolean createContextWrapper) {
         this.context = context;
         this.themeId = themeId;
     }

@@ -3,6 +3,7 @@ package org.robolectric.shadows;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Bundle;
 import org.robolectric.Robolectric;
 import org.robolectric.internal.Implementation;
 import org.robolectric.internal.Implements;
@@ -15,6 +16,10 @@ public class ShadowProgressDialog extends ShadowAlertDialog {
     private boolean indeterminate;
     private int max;
     private int progress;
+
+    @Implementation
+    public void onCreate(Bundle savedInstanceState) {
+    }
 
     @Implementation
     public static ProgressDialog show(Context context, CharSequence title, CharSequence message) {

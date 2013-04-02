@@ -96,10 +96,8 @@ public class ShadowWrangler implements ClassHandler {
         }
 
         if (shadowConfig == null) {
-            if (debug) {
-                System.out.println("[DEBUG] no shadow found for " + signature + "; " + describeIfStrict(invocationProfile));
-            }
-            return strict(invocationProfile) ? null : DO_NOTHING_PLAN;
+            if (debug) System.out.println("[DEBUG] no shadow found for " + signature + "; will call real code");
+            return null;
         } else {
             try {
                 ClassLoader classLoader = theClass.getClassLoader();
@@ -118,16 +116,12 @@ public class ShadowWrangler implements ClassHandler {
                     }
                     return strict(invocationProfile) ? null : DO_NOTHING_PLAN;
                 }
-                if (debug) {
-                    System.out.println("[DEBUG] found shadow for " + signature + "; will call " + shadowMethod);
-                }
+                if (debug) System.out.println("[DEBUG] found shadow for " + signature + "; will call " + shadowMethod);
                 return new ShadowMethodPlan(shadowMethod);
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             } catch (NoSuchMethodException e) {
-                if (debug) {
-                    System.out.println("[DEBUG] no shadow for " + signature + " found on " + shadowConfig.shadowClassName + "; " + describeIfStrict(invocationProfile));
-                }
+                if (debug) System.out.println("[DEBUG] no shadow for " + signature + " found on " + shadowConfig.shadowClassName + "; " + describeIfStrict(invocationProfile));
                 return shadowConfig.callThroughByDefault ? null : strict(invocationProfile) ? null : DO_NOTHING_PLAN;
             }
         }
@@ -138,8 +132,7 @@ public class ShadowWrangler implements ClassHandler {
     }
 
     private boolean strict(InvocationProfile invocationProfile) {
-        return true;
-//        return invocationProfile.clazz.getName().startsWith("android.support") || invocationProfile.isSpecial();
+        return invocationProfile.clazz.getName().startsWith("android.support") || invocationProfile.isSpecial();
     }
 
     private Class<?> getShadowedClass(Method shadowMethod) {

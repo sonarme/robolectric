@@ -20,5 +20,5 @@ public @interface Implements {
     /**
      * If true, Robolectric will invoke the actual Android code for any method that isn't shadowed.
      */
-    boolean callThroughByDefault() default false;
+    boolean callThroughByDefault() default true;
 }

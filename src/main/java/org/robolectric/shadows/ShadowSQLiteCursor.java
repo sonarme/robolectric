@@ -114,7 +114,7 @@ public class ShadowSQLiteCursor extends ShadowAbstractCursor {
                 throw new RuntimeException(x);
             }
         } else {
-            return (String)value;
+            return value == null ? null : value.toString();
         }
     }
 	

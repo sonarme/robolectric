@@ -122,7 +122,7 @@ public class ShadowResources {
 
     @Implementation
     public ColorStateList getColorStateList(int id) {
-        return new ColorStateList(null, null);
+        return new ColorStateList(new int[0][0], new int[0]);
     }
 
     @Implementation
@@ -338,5 +338,24 @@ public class ShadowResources {
             ((UsesResources) shadow).injectResources(resources);
         }
         return instance;
+    }
+
+    @Implements(Resources.NotFoundException.class)
+    public static class ShadowNotFoundException {
+        @RealObject Resources.NotFoundException realObject;
+
+        private String message;
+
+        public void __constructor__() {
+        }
+
+        public void __constructor__(String name) {
+            this.message = name;
+        }
+
+        @Implementation
+        public String toString() {
+            return realObject.getClass().getName() + ": " + message;
+        }
     }
 }

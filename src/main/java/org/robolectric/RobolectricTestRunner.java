@@ -177,7 +177,7 @@ public class RobolectricTestRunner extends BlockJUnit4ClassRunner {
     }
 
     public boolean useAsm() {
-        return false;
+        return true;
     }
 
     private void injectClassHandler(ClassLoader robolectricClassLoader, ClassHandler classHandler) {
